@@ -13,24 +13,37 @@ In `/data/LeafRiverDaily.csv` you have been given daily temperature, precipitati
 3. Train a linear regression model on the training data and evaluate its performance on the testing data using appropriate metrics (e.g., R-squared, mean absolute error). Use a sample size where inputs are the previous 90 days of temperature and precipitation data, and the target variable is the streamflow on the 91st day. You may need to reshape your data accordingly to fit this format.
 
 ## Problem 3: Calibration of a simple hydrological model (25 points)
-For this problem you will implement and calibrate a "simple" nonlinear hydrological model using the SCE optimization algorithm. The model is defined as follows:
+For this problem you will implement and calibrate a nonlinear hydrological model using the SCE optimization algorithm. The model is a conceptual bucket model expressed as a state-space ODE. The single state variable $S(t)$ represents the water storage in the catchment, and its evolution is governed by:
 
 $$
-Q(t) = a \cdot P(t) + b \cdot T(t) +
-c \cdot Q(t-1) + d
+\frac{dS}{dt} = P(t) - a \cdot \max(T(t),\, 0) - b \cdot S(t)^c
 $$
 
 Where:
-- $Q(t)$ is the streamflow at time $t$ (the target variable).
-- $P(t)$ is the precipitation at time $t$ (a feature).
-- $T(t)$ is the temperature at time $t$ (a feature).
-- $Q(t-1)$ is the streamflow at time $t-1$ (a feature).
-- $a$, $b$, $c$, and $d$ are the model parameters that we need to calibrate.
+- $S(t)$ is the catchment storage at time $t$ (the state variable).
+- $P(t)$ is the precipitation at time $t$ (a forcing input).
+- $T(t)$ is the temperature at time $t$ (a forcing input).
+- $a \cdot \max(T(t),\, 0)$ represents evapotranspiration, assumed proportional to temperature when temperature is positive.
+- $b \cdot S(t)^c$ is a nonlinear storage-discharge relationship that produces streamflow.
+
+The predicted streamflow is then given by the output equation:
+
+$$
+Q(t) = b \cdot S(t)^c + d
+$$
+
+The parameters to calibrate are:
+- $a$ — evapotranspiration coefficient
+- $b$ — discharge coefficient
+- $c$ — nonlinearity exponent of the storage-discharge relationship
+- $d$ — baseflow offset
 
 Perform the following steps:
-1. Implement the model and integration using scipy's `odeint` function. You will need to define a function that computes the derivatives of the state variables (in this case, just $Q$) based on the model equations.
-2. Define an objective function that computes the mean squared error between the observed streamflow and the model predictions for a given set of parameters.
+1. Implement the model using scipy's `solve_ivp` (or `odeint`) function. You will need to define a function that computes $dS/dt$ given the current state $S$ and the forcing inputs $P(t)$ and $T(t)$. Since the forcing data is daily, you will need to interpolate $P$ and $T$ to evaluate them at arbitrary times requested by the ODE solver. You can use `scipy.interpolate.interp1d` for this purpose.
+2. Define an objective function that computes the mean squared error between the observed streamflow and the model-predicted streamflow $Q(t)$ for a given set of parameters.
 3. Use the SCE optimization algorithm to find the optimal parameters $a$, $b$, $c$, and $d$ that minimize the objective function using the SCE-UA algorithm as implemented with the `spotpy` library.
+
+Note: you should use the spotpy documentation to help you implement the calibration: https://spotpy.readthedocs.io/en/latest/Calibration_with_SCE-UA/
 
 ## Problem 4: Comparison of linear regression and SCE optimization (25 points)
 Compare the performance of the linear regression model and the SCE optimization algorithm for predicting streamflow from the previous problems based on the same dataset. Perform the following steps:
