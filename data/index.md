@@ -1,3 +1,3 @@
 # Data
 
-Datasets for the course will be added here.
+Datasets and data resources for the course.
