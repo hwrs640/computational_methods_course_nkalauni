@@ -1,3 +1,3 @@
 # Extra Materials
 
-Supplementary materials and advanced topics will be added here.
+Supplementary materials including assignments, advanced topics, and additional resources.
