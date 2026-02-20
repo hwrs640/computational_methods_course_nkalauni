@@ -1,6 +1,6 @@
 # HWRS640 - Assignment 2: Regression, ODE solvers, and optimization
 
-## Due date: Friday, February 20th at 11:59 PM
+## Due date: Monday, February 23rd at 11:59 PM
 
 ## Problem 1: Shuffled complex evolution (SCE) optimization (25 points)
 Read the original paper by Duan et al. (1992) on the Shuffled Complex Evolution (SCE) optimization algorithm (https://doi.org/10.1007/BF00939380). Summarize the main steps of the SCE algorithm in your own words. Additionally discuss the problems that the SCE algorithm is designed to solve, and how it compares to other optimization algorithms (e.g., gradient descent, genetic algorithms).
@@ -29,19 +29,18 @@ Where:
 The predicted streamflow is then given by the output equation:
 
 $$
-Q(t) = b \cdot S(t)^c + d
+Q(t) = b \cdot S(t)^c
 $$
 
 The parameters to calibrate are:
 - $a$ — evapotranspiration coefficient
 - $b$ — discharge coefficient
 - $c$ — nonlinearity exponent of the storage-discharge relationship
-- $d$ — baseflow offset
 
 Perform the following steps:
 1. Implement the model using scipy's `solve_ivp` (or `odeint`) function. You will need to define a function that computes $dS/dt$ given the current state $S$ and the forcing inputs $P(t)$ and $T(t)$. Since the forcing data is daily, you will need to interpolate $P$ and $T$ to evaluate them at arbitrary times requested by the ODE solver. You can use `scipy.interpolate.interp1d` for this purpose.
 2. Define an objective function that computes the mean squared error between the observed streamflow and the model-predicted streamflow $Q(t)$ for a given set of parameters.
-3. Use the SCE optimization algorithm to find the optimal parameters $a$, $b$, $c$, and $d$ that minimize the objective function using the SCE-UA algorithm as implemented with the `spotpy` library.
+3. Use the SCE optimization algorithm to find the optimal parameters $a$, $b$, and $c$ that minimize the objective function using the SCE-UA algorithm as implemented with the `spotpy` library.
 
 Note: you should use the spotpy documentation to help you implement the calibration: https://spotpy.readthedocs.io/en/latest/Calibration_with_SCE-UA/
 
