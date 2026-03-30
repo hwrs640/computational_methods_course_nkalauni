@@ -10,6 +10,7 @@ dependencies = [
     "boto3>=1.42.16",
     "cartopy>=0.25.0",
     "dask>=2026.1.1",
+    "datasets>=4.8.4",
     "distributed>=2026.1.1",
     "eofs>=2.0.0",
     "flake8>=7.3.0",
