@@ -1,6 +1,6 @@
 # HWRS640 - Assignment 3: Convolutional Neural Networks for Satellite Image Segmentation
 
-## Due date: Monday, March 30th at 11:59 PM
+## Due date: Friday, April 3rd at 11:59 PM
 
 ---
 

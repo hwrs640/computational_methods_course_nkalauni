@@ -6,6 +6,8 @@ This repository hosts course materials for a course on computational methods for
 
 Visit the course website: [https://hwrs640.github.io/computational_methods_course/](https://hwrs640.github.io/computational_methods_course/)
 
+You may also find the [minicamels package](https://github.com/BennettHydroLab/minicamels) useful for working with the CAMELS datasets in Python.
+
 ## 📖 Course Structure
 
 The course materials are organized into the following sections:
